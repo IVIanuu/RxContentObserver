@@ -33,8 +33,6 @@ import io.reactivex.functions.Function;
  */
 public final class RxContentObserver {
 
-    private static final Handler HANDLER = new Handler();
-
     private RxContentObserver() {
         // no instances
     }
@@ -66,31 +64,8 @@ public final class RxContentObserver {
                                               @NonNull Uri uri,
                                               boolean deliverSelfNotifications,
                                               boolean notifyForDescendants) {
-        return Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                ContentObserver observer = new ContentObserver(HANDLER) {
-                    @Override
-                    public void onChange(boolean selfChange) {
-                        super.onChange(selfChange);
-                        if (!e.isDisposed()) {
-                            e.onNext(selfChange);
-                        }
-                    }
-
-                    @Override
-                    public boolean deliverSelfNotifications() {
-                        return deliverSelfNotifications;
-                    }
-                };
-
-                e.setCancellable(()
-                        -> context.getContentResolver().unregisterContentObserver(observer));
-
-                context.getContentResolver()
-                        .registerContentObserver(uri, notifyForDescendants, observer);
-            }
-        });
+        return ContentObserverObservable.create(
+                context, uri, deliverSelfNotifications, notifyForDescendants);
     }
 
     /**
