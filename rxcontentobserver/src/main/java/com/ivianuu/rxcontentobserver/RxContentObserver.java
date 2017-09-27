@@ -28,6 +28,8 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Function;
 
+import static com.ivianuu.preconditions.Preconditions.checkNotNull;
+
 /**
  * Entry point to create content observer observables
  */
@@ -64,6 +66,8 @@ public final class RxContentObserver {
                                               @NonNull Uri uri,
                                               boolean deliverSelfNotifications,
                                               boolean notifyForDescendants) {
+        checkNotNull(context, "context == null");
+        checkNotNull(uri, "uri == null");
         return ContentObserverObservable.create(
                 context, uri, deliverSelfNotifications, notifyForDescendants);
     }
@@ -99,6 +103,7 @@ public final class RxContentObserver {
                                             @NonNull Function<Uri, T> fetcher,
                                             boolean deliverSelfNotifications,
                                             boolean notifyForDescendants) {
+        checkNotNull(fetcher, "fetcher == null");
         return observe(context, uri, deliverSelfNotifications, notifyForDescendants)
                 .map(__ -> uri)
                 .startWith(uri) // emit current value value
