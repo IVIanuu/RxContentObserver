@@ -17,18 +17,14 @@
 package com.ivianuu.rxcontentobserver;
 
 import android.content.Context;
-import android.database.ContentObserver;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Function;
 
-import static com.ivianuu.preconditions.Preconditions.checkNotNull;
+import static com.ivianuu.rxcontentobserver.Preconditions.checkNotNull;
 
 /**
  * Entry point to create content observer observables
