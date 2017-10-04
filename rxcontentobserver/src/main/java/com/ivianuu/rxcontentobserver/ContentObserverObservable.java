@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
@@ -32,7 +33,7 @@ import io.reactivex.ObservableOnSubscribe;
  */
 final class ContentObserverObservable implements ObservableOnSubscribe<Boolean> {
 
-    private static final Handler HANDLER = new Handler();
+    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
 
     private final Context context;
     private final Uri uri;
