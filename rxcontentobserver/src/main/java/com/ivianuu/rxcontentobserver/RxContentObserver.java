@@ -18,8 +18,11 @@ package com.ivianuu.rxcontentobserver;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -31,6 +34,8 @@ import static com.ivianuu.rxcontentobserver.Preconditions.checkNotNull;
  */
 public final class RxContentObserver {
 
+    private static final Handler DEFAULT_HANDLER = new Handler(Looper.getMainLooper());
+
     private RxContentObserver() {
         // no instances
     }
@@ -41,7 +46,7 @@ public final class RxContentObserver {
     @CheckResult @NonNull
     public static Observable<Boolean> observe(@NonNull Context context,
                                               @NonNull Uri uri) {
-        return observe(context, uri, true);
+        return observe(context, uri, (Handler) null);
     }
 
     /**
@@ -50,8 +55,19 @@ public final class RxContentObserver {
     @CheckResult @NonNull
     public static Observable<Boolean> observe(@NonNull Context context,
                                               @NonNull Uri uri,
+                                              @Nullable Handler handler) {
+        return observe(context, uri, handler, false);
+    }
+
+    /**
+     * Emits on changes of the uri
+     */
+    @CheckResult @NonNull
+    public static Observable<Boolean> observe(@NonNull Context context,
+                                              @NonNull Uri uri,
+                                              @Nullable Handler handler,
                                               boolean deliverSelfNotifications) {
-        return observe(context, uri, deliverSelfNotifications, false);
+        return observe(context, uri, handler, deliverSelfNotifications, false);
     }
 
     /**
@@ -60,12 +76,14 @@ public final class RxContentObserver {
     @CheckResult @NonNull
     public static Observable<Boolean> observe(@NonNull Context context,
                                               @NonNull Uri uri,
+                                              @Nullable Handler handler,
                                               boolean deliverSelfNotifications,
                                               boolean notifyForDescendants) {
         checkNotNull(context, "context == null");
         checkNotNull(uri, "uri == null");
+        if (handler == null) handler = DEFAULT_HANDLER;
         return ContentObserverObservable.create(
-                context, uri, deliverSelfNotifications, notifyForDescendants);
+                context, uri, handler, deliverSelfNotifications, notifyForDescendants);
     }
 
     /**
@@ -75,7 +93,7 @@ public final class RxContentObserver {
     public static <T> Observable<T> observe(@NonNull Context context,
                                             @NonNull Uri uri,
                                             @NonNull Function<Uri, T> fetcher) {
-        return observe(context, uri, fetcher, true);
+        return observe(context, uri, null, fetcher);
     }
 
     /**
@@ -84,10 +102,9 @@ public final class RxContentObserver {
     @CheckResult @NonNull
     public static <T> Observable<T> observe(@NonNull Context context,
                                             @NonNull Uri uri,
-                                            @NonNull Function<Uri, T> fetcher,
-                                            boolean deliverSelfNotifications) {
-        return observe(
-                context, uri, fetcher, deliverSelfNotifications, false);
+                                            @Nullable Handler handler,
+                                            @NonNull Function<Uri, T> fetcher) {
+        return observe(context, uri, handler, true, fetcher);
     }
 
     /**
@@ -96,11 +113,25 @@ public final class RxContentObserver {
     @CheckResult @NonNull
     public static <T> Observable<T> observe(@NonNull Context context,
                                             @NonNull Uri uri,
-                                            @NonNull Function<Uri, T> fetcher,
+                                            @Nullable Handler handler,
                                             boolean deliverSelfNotifications,
-                                            boolean notifyForDescendants) {
+                                            @NonNull Function<Uri, T> fetcher) {
+        return observe(
+                context, uri, handler, deliverSelfNotifications, false, fetcher);
+    }
+
+    /**
+     * Emits the value on changes and on first subscribe
+     */
+    @CheckResult @NonNull
+    public static <T> Observable<T> observe(@NonNull Context context,
+                                            @NonNull Uri uri,
+                                            @Nullable Handler handler,
+                                            boolean deliverSelfNotifications,
+                                            boolean notifyForDescendants,
+                                            @NonNull Function<Uri, T> fetcher) {
         checkNotNull(fetcher, "fetcher == null");
-        return observe(context, uri, deliverSelfNotifications, notifyForDescendants)
+        return observe(context, uri, handler, deliverSelfNotifications, notifyForDescendants)
                 .map(__ -> uri)
                 .startWith(uri) // emit current value value
                 .map(fetcher);

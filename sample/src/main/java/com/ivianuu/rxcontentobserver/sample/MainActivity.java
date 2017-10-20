@@ -17,16 +17,15 @@
 package com.ivianuu.rxcontentobserver.sample;
 
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import com.ivianuu.rxcontentobserver.RxContentObserver;
 
-import java.util.Set;
-
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +35,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        HandlerThread handlerThread = new HandlerThread("joo");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+
         Uri uri = Settings.Global.getUriFor(Settings.Global.BLUETOOTH_ON);
-        RxContentObserver.observe(this, uri, getFetcher())
+        RxContentObserver.observe(this, uri, handler, getFetcher())
                 .subscribe(integer -> Toast.makeText(MainActivity.this, "Changed " + integer, Toast.LENGTH_SHORT).show());
 
     }

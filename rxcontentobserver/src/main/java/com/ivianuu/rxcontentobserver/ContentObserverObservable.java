@@ -20,7 +20,6 @@ import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
@@ -33,19 +32,20 @@ import io.reactivex.ObservableOnSubscribe;
  */
 final class ContentObserverObservable implements ObservableOnSubscribe<Boolean> {
 
-    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
-
     private final Context context;
     private final Uri uri;
+    private final Handler handler;
     private final boolean deliverSelfNotifications;
     private final boolean notifyForDescendants;
 
     private ContentObserverObservable(Context context,
                                       Uri uri,
+                                      Handler handler,
                                       boolean deliverSelfNotifications,
                                       boolean notifyForDescendants) {
         this.context = context;
         this.uri = uri;
+        this.handler = handler;
         this.deliverSelfNotifications = deliverSelfNotifications;
         this.notifyForDescendants = notifyForDescendants;
     }
@@ -55,16 +55,17 @@ final class ContentObserverObservable implements ObservableOnSubscribe<Boolean> 
      */
     @CheckResult @NonNull
     static Observable<Boolean> create(@NonNull Context context,
-                                     @NonNull Uri uri,
-                                     boolean deliverSelfNotifications,
-                                     boolean notifyForDescendants) {
+                                      @NonNull Uri uri,
+                                      @NonNull Handler handler,
+                                      boolean deliverSelfNotifications,
+                                      boolean notifyForDescendants) {
         return Observable.create(new ContentObserverObservable(
-                context, uri, deliverSelfNotifications, notifyForDescendants));
+                context, uri, handler, deliverSelfNotifications, notifyForDescendants));
     }
 
     @Override
     public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-        ContentObserver observer = new ContentObserver(HANDLER) {
+        ContentObserver observer = new ContentObserver(handler) {
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
