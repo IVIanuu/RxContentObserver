@@ -69,9 +69,7 @@ final class ContentObserverObservable implements ObservableOnSubscribe<Boolean> 
             @Override
             public void onChange(boolean selfChange) {
                 super.onChange(selfChange);
-                if (!e.isDisposed()) {
-                    e.onNext(selfChange);
-                }
+                e.onNext(selfChange);
             }
 
             @Override
