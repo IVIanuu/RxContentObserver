@@ -25,7 +25,7 @@ import android.support.annotation.CheckResult
 import io.reactivex.Observable
 
 /**
- * Entry point to create content observer observables
+ * Factory to create [Observable]'s of [ContentObserver]'s
  */
 object RxContentObserver {
 
