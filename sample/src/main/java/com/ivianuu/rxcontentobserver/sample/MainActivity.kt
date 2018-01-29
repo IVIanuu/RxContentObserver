@@ -17,17 +17,13 @@
 package com.ivianuu.rxcontentobserver.sample
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-
 import com.ivianuu.rxcontentobserver.RxContentObserver
-
-import io.reactivex.functions.Function
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,12 +37,12 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler(handlerThread.looper)
 
         val uri = Settings.Global.getUriFor(Settings.Global.BLUETOOTH_ON)
-        RxContentObserver.observe(this, uri, handler) {
+        RxContentObserver.observe<Int>(this, uri, handler) {
             Settings.Global.getInt(this@MainActivity.contentResolver, uri.lastPathSegment) }
                 .subscribe { integer ->
                     Toast.makeText(this@MainActivity, "Changed " + integer,
                             Toast.LENGTH_SHORT).show()
-                }
 
+                }
     }
 }

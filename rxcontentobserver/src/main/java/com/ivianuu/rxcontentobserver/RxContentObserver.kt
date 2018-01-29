@@ -29,7 +29,7 @@ import io.reactivex.Observable
  */
 object RxContentObserver {
 
-    val DEFAULT_HANDLER = Handler(Looper.getMainLooper())
+    private val DEFAULT_HANDLER = Handler(Looper.getMainLooper())
 
     /**
      * Emits [Boolean]'s on changes of the [uri]
@@ -68,12 +68,12 @@ object RxContentObserver {
     @CheckResult
     @JvmOverloads
     @JvmStatic
-    inline fun <T> observe(context: Context,
-                           uri: Uri,
-                           handler: Handler = DEFAULT_HANDLER,
-                           deliverSelfNotifications: Boolean = false,
-                           notifyForDescendants: Boolean = false,
-                           crossinline fetcher: (Uri) -> T
+    fun <T> observe(context: Context,
+                    uri: Uri,
+                    handler: Handler = DEFAULT_HANDLER,
+                    deliverSelfNotifications: Boolean = false,
+                    notifyForDescendants: Boolean = false,
+                    fetcher: (Uri) -> T
     ): Observable<T> {
         return observe(context, uri, handler, deliverSelfNotifications, notifyForDescendants)
                 .map { uri }
