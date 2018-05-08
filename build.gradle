@@ -1,6 +1,3 @@
-import Deps
-import Versions
-
 buildscript {
 
     repositories {
