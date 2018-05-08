@@ -21,7 +21,6 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.CheckResult
 import io.reactivex.Observable
 
 /**
@@ -31,10 +30,6 @@ object RxContentObserver {
 
     private val DEFAULT_HANDLER = Handler(Looper.getMainLooper())
 
-    /**
-     * Emits [Boolean]'s on changes of the [uri]
-     */
-    @CheckResult
     @JvmStatic
     @JvmOverloads
     fun observe(context: Context,
@@ -62,10 +57,6 @@ object RxContentObserver {
         }
     }
 
-    /**
-     * Emits [T] on changes and on first subscribe
-     */
-    @CheckResult
     @JvmOverloads
     @JvmStatic
     fun <T> observe(context: Context,

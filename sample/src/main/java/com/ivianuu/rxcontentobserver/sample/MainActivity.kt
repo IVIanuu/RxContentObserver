@@ -37,12 +37,12 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler(handlerThread.looper)
 
         val uri = Settings.Global.getUriFor(Settings.Global.BLUETOOTH_ON)
-        RxContentObserver.observe<Int>(this, uri, handler) {
-            Settings.Global.getInt(this@MainActivity.contentResolver, uri.lastPathSegment) }
-                .subscribe { integer ->
-                    Toast.makeText(this@MainActivity, "Changed " + integer,
-                            Toast.LENGTH_SHORT).show()
-
-                }
+        RxContentObserver.observe(this, uri, handler) {
+            Settings.Global.getInt(this@MainActivity.contentResolver, uri.lastPathSegment)
+        }
+            .subscribe { integer ->
+                Toast.makeText(this@MainActivity, "Changed " + integer,
+                    Toast.LENGTH_SHORT).show()
+            }
     }
 }
