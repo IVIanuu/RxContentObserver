@@ -9,7 +9,7 @@ object Versions {
     const val versionName = "1.0"
 
     const val kotlin = "1.2.41"
-    const val maven = "2.1"
+    const val mavenGradle = "2.1"
     const val rxJava = "2.1.13"
     const val support = "27.1.1"
 }
@@ -20,7 +20,7 @@ object Deps {
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
 
-    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.maven}"
+    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
     const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
 
