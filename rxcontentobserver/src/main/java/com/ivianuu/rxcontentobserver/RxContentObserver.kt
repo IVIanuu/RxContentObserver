@@ -32,11 +32,12 @@ object RxContentObserver {
 
     @JvmStatic
     @JvmOverloads
-    fun observe(context: Context,
-                uri: Uri,
-                handler: Handler = DEFAULT_HANDLER,
-                deliverSelfNotifications: Boolean = false,
-                notifyForDescendants: Boolean = false
+    fun observe(
+        context: Context,
+        uri: Uri,
+        handler: Handler = DEFAULT_HANDLER,
+        deliverSelfNotifications: Boolean = false,
+        notifyForDescendants: Boolean = false
     ): Observable<Boolean> {
         return Observable.create { e ->
             val observer = object : ContentObserver(handler) {
@@ -59,12 +60,13 @@ object RxContentObserver {
 
     @JvmOverloads
     @JvmStatic
-    fun <T> observe(context: Context,
-                    uri: Uri,
-                    handler: Handler = DEFAULT_HANDLER,
-                    deliverSelfNotifications: Boolean = false,
-                    notifyForDescendants: Boolean = false,
-                    fetcher: (Uri) -> T
+    fun <T> observe(
+        context: Context,
+        uri: Uri,
+        handler: Handler = DEFAULT_HANDLER,
+        deliverSelfNotifications: Boolean = false,
+        notifyForDescendants: Boolean = false,
+        fetcher: (Uri) -> T
     ): Observable<T> {
         return observe(context, uri, handler, deliverSelfNotifications, notifyForDescendants)
                 .map { uri }
