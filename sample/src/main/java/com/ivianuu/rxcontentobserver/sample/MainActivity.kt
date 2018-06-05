@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
         RxContentObserver.observe(this, uri, handler) {
             Settings.Global.getInt(this@MainActivity.contentResolver, uri.lastPathSegment)
         }
-            .subscribe { integer ->
-                Toast.makeText(this@MainActivity, "Changed " + integer,
+            .subscribe {
+                Toast.makeText(this@MainActivity, "Changed $it",
                     Toast.LENGTH_SHORT).show()
             }
     }
