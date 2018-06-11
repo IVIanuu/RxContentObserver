@@ -28,7 +28,9 @@ import io.reactivex.Observable
  */
 object RxContentObserver {
 
-    private val DEFAULT_HANDLER = Handler(Looper.getMainLooper())
+    private val DEFAULT_HANDLER by lazy {
+        Handler(Looper.getMainLooper())
+    }
 
     @JvmStatic
     @JvmOverloads
