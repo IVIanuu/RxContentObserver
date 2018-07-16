@@ -9,9 +9,9 @@ object Versions {
     const val versionName = "1.0"
 
     const val androidGradlePlugin = "3.1.3"
-    const val kotlin = "1.2.50"
+    const val kotlin = "1.2.51"
     const val mavenGradlePlugin = "2.1"
-    const val rxJava = "2.1.14"
+    const val rxJava = "2.1.16"
     const val support = "28.0.0-alpha3"
 }
 //
